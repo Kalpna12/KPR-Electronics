@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KPR Electronics</title>
+  <style>
+  /* All CSS from styles.css embedded */
+  * { margin:0; padding:0; box-sizing:border-box; font-family:Inter, system-ui, sans-serif; }
+  body { background:#fff; color:#111827; transition: background 0.25s, color 0.25s; }
+  body.dark { background:#071022; color:#e6eef8; }
+  .container { width:90%; max-width:1200px; margin:0 auto; }
+  header { position:sticky; top:0; background:#fff; display:flex; justify-content:space-between; align-items:center; padding:14px 0; z-index:40; }
+  body.dark header { background:#0b1220; }
+  header nav a { margin-right:16px; text-decoration:none; color:inherit; opacity:0.85; }
+  header .brand { font-weight:800; font-size:1.1rem; letter-spacing:0.5px; }
+  #themeToggle { padding:8px 14px; border-radius:8px; border:none; cursor:pointer; background:#0b6bf3; color:#fff; transition: transform .2s ease, box-shadow .2s ease; }
+  #themeToggle:hover{ transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+  .hero { text-align:center; padding:64px 0; }
+  .hero h1 { font-size:40px; margin-bottom:10px; }
+  .hero p { font-size:18px; color:rgba(0,0,0,0.6); }
+  body.dark .hero p { color:rgba(255,255,255,0.75); }
+  .categories { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin:24px 0; }
+  .cat-item { padding:10px 16px; border-radius:999px; cursor:pointer; background:#e6f0ff; color:#034ea2; font-weight:600; opacity:0.9; transition: transform .2s ease; }
+  .cat-item.active{ box-shadow:0 6px 18px rgba(3,78,162,0.14); transform:translateY(-3px); }
+  body.dark .cat-item { background:rgba(255,255,255,0.04); color:#cfe6ff; }
+  .search-wrap { text-align:center; margin-bottom:18px; }
+  #searchBar { padding:10px 12px; width:100%; max-width:420px; border-radius:10px; border:1px solid #d1d5db; }
+  body.dark #searchBar { border-color:#2b3946; background:transparent; color:inherit; }
+  .product-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:18px; margin:30px 0; }
+  .card { background:linear-gradient(180deg, rgba(255,255,255,0.85), #fff); border-radius:12px; padding:14px; box-shadow:0 6px 20px rgba(2,6,23,0.06); transition: transform .22s ease, box-shadow .22s ease; }
+  .card:hover{ transform:translateY(-6px); }
+  body.dark .card { background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow:0 6px 20px rgba(2,6,23,0.35); }
+  .card img { width:100%; height:150px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
+  .card h3 { margin-bottom:6px; font-size:1.05rem; }
+  .specs { font-size:0.9rem; color:rgba(0,0,0,0.6); margin-bottom:8px; }
+  body.dark .specs { color:rgba(255,255,255,0.75); }
+  .card .actions{ display:flex; gap:8px; align-items:center; }
+  .btn { padding:8px 12px; border-radius:8px; border:none; cursor:pointer; background:#0b6bf3; color:#fff; transition: transform .22s ease, box-shadow .22s ease; }
+  .btn:hover{ transform:translateY(-3px); box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+  .mini{ padding:6px 8px; border:1px solid rgba(0,0,0,0.08); background:transparent; }
+  .modal-bg { position:fixed; inset:0; display:none; background:rgba(2,6,23,0.6); align-items:center; justify-content:center; z-index:60; }
+  .modal { width:100%; max-width:560px; background:#fff; border-radius:12px; padding:18px; }
+  body.dark .modal { background:#0b1220; color:inherit; }
+  .modal h3 { margin-bottom:6px; }
+  .fade-in { opacity:0; transform:translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .fade-in.visible { opacity:1; transform:translateY(0); }
+  #contact { padding:40px 0; }
+  #contact form { max-width:600px; margin:18px auto; display:flex; flex-direction:column; gap:10px; }
+  #contact button { width:140px; margin:auto; }
+  footer { padding:28px 0; text-align:center; }
+  footer a { margin:0 8px; color:#60a5fa; }
+  </style>
+</head>
+<body class="light">
+  <header>
+    <div class="brand">KPR Electronics</div>
+    <nav>
+      <a href="#products">Products</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button id="themeToggle">Dark</button>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Premium Electronics for Modern Living</h1>
+      <p>High-performance, durable, and stylish products built for businesses and consumers.</p>
+    </section>
+
+    <section class="categories">
+      <div class="cat-item active" data-cat="">All</div>
+      <div class="cat-item" data-cat="Home Appliances">Home Appliances</div>
+      <div class="cat-item" data-cat="Audio Devices">Audio Devices</div>
+      <div class="cat-item" data-cat="Wearables">Wearables</div>
+      <div class="cat-item" data-cat="Smart Gadgets">Smart Gadgets</div>
+    </section>
+
+    <div class="search-wrap">
+      <input id="searchBar" type="search" placeholder="Search products...">
+    </div>
+
+    <section id="products" class="product-grid"></section>
+
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <form id="contactForm">
+        <input name="name" placeholder="Your Name" required>
+        <input name="email" type="email" placeholder="Email" required>
+        <textarea name="message" placeholder="Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="copyYear"></span> KPR Electronics</p>
+    <div>
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">LinkedIn</a>
+    </div>
+  </footer>
+
+  <div class="modal-bg" id="modalBg">
+    <div class="modal" id="modal">
+      <h3 id="modalTitle">Request a Quote</h3>
+      <form id="quoteForm">
+        <input name="name" placeholder="Your Name" required>
+        <input name="email" type="email" placeholder="Email" required>
+        <textarea name="message" placeholder="Message" required></textarea>
+        <button type="submit">Send Quote</button>
+        <button type="button" id="closeModal">Close</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  /* All JS from script.js embedded */
+const products = [
+  { id:1, name:"KPR Smart LED TV", img:"C:\Users\Win10 Pro\Desktop\HTML\KPR WEBSITE\public\assets\tv1.jpg", desc:"4K UHD, HDR10+", category:"Home Appliances" },
+  { id:2, name:"KPR Bluetooth Speaker", img:"C:\Users\Win10 Pro\Desktop\HTML\KPR WEBSITE\public\assets\speaker1.jpg", desc:"20W, deep bass", category:"Audio Devices" },
+  { id:3, name:"KPR Air Purifier", img:"C:\Users\Win10 Pro\Desktop\HTML\KPR WEBSITE\public\assets\air_purifier2.jpg", desc:"HEPA filter, silent mode", category:"Home Appliances" },
+  { id:4, name:"KPR Smart Watch", img:"C:\Users\Win10 Pro\Desktop\HTML\KPR WEBSITE\public\assets\watch.png", desc:"Health tracking, 7-day battery", category:"Wearables" },
+  { id:5, name:"KPR Smart Light", img:"C:\Users\Win10 Pro\Desktop\HTML\KPR WEBSITE\public\assets\light1.jpg", desc:"RGB, voice control", category:"Smart Gadgets" }
+];
+
+const grid = document.getElementById('products');
+const categories = document.querySelectorAll('.cat-item');
+const searchBar = document.getElementById('searchBar');
+const modalBg = document.getElementById('modalBg');
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modalTitle');
+const quoteForm = document.getElementById('quoteForm');
+const closeModalBtn = document.getElementById('closeModal');
+let activeCategory = '';
+let activeProduct = null;
+
+function renderProducts(filter = '', searchTerm=''){
+  grid.innerHTML = '';
+  const term = searchTerm.trim().toLowerCase();
+  const filtered = products.filter(p => (!filter || p.category===filter) && (!term || p.name.toLowerCase().includes(term) || p.desc.toLowerCase().includes(term)) );
+  if(filtered.length===0){ grid.innerHTML='<p style="grid-column:1/-1;text-align:center;opacity:0.7;">No products found.</p>'; return; }
+  filtered.forEach(p=>{
+    const card = document.createElement('div');
+    card.className='card fade-in';
+    card.innerHTML=`
+      <img src="${p.img}" alt="${p.name}" />
+      <h3>${p.name}</h3>
+      <div class="specs">${p.category} • ${p.desc}</div>
+      <div class="actions">
+        <button class="btn" onclick="openModal(${p.id})">Get a Quote</button>
+        <button class="mini" onclick="openModal(${p.id})">Reviews</button>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  observeFadeIns();
+}
+
+categories.forEach(cat => cat.addEventListener('click',()=>{
+  categories.forEach(c=>c.classList.remove('active'));
+  cat.classList.add('active');
+  activeCategory = cat.dataset.cat;
+  renderProducts(activeCategory, searchBar.value);
+}));
+
+searchBar.addEventListener('input',e=>renderProducts(activeCategory,e.target.value));
+
+function openModal(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  activeProduct=p;
+  modalTitle.textContent='Request a Quote — '+p.name;
+  modalBg.style.display='flex';
+}
+closeModalBtn.addEventListener('click',()=>modalBg.style.display='none');
+modalBg.addEventListener('click',e=>{ if(e.target===modalBg) modalBg.style.display='none'; });
+
+quoteForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  if(!activeProduct) return;
+  const data = new FormData(quoteForm);
+  const payload = {
+    product: activeProduct.name,
+    name: data.get('name'),
+    email: data.get('email'),
+    message: data.get('message')
+  };
+  try{
+    const res = await fetch('/api/quote',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    if(res.ok) alert('Quote request sent!');
+    else alert('Failed to send.');
+  }catch{ alert('Server error'); }
+  quoteForm.reset();
+  modalBg.style.display='none';
+});
+
+const themeBtn = document.getElementById('themeToggle');
+themeBtn.addEventListener('click',()=>{
+  const next = document.body.classList.contains('dark')?'light':'dark';
+  document.body.className=next;
+  themeBtn.textContent=next==='dark'?'Light':'Dark';
+  localStorage.setItem('kpr_theme',next);
+});
+window.addEventListener('load',()=>{
+  const saved = localStorage.getItem('kpr_theme')||'light';
+  document.body.className=saved;
+  themeBtn.textContent=saved==='dark'?'Light':'Dark';
+  document.getElementById('copyYear').textContent=new Date().getFullYear();
+  renderProducts();
+});
+
+function observeFadeIns(){
+  const obs = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }); },{threshold:0.15});
+  document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+}
+  </script>
+</body>
+</html>
